@@ -5,9 +5,23 @@ on:
     branches:
       - main
 
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  API_APP_NAME: app-api-dev
+  FRONTEND_APP_NAME: app-front-dev
+
 jobs:
 
-  test:
+  #################################################
+  # CI - API
+  #################################################
+
+  test-api:
+    name: Test API
+
     runs-on: ubuntu-latest
 
     defaults:
@@ -15,7 +29,7 @@ jobs:
         working-directory: api
 
     steps:
-      - name: Checkout
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Setup Node
@@ -29,29 +43,77 @@ jobs:
       - name: Run Tests
         run: npm test
 
-  migrations:
+  #################################################
+  # BUILD FRONTEND
+  #################################################
+
+  build-frontend:
+    name: Build Frontend
+
     runs-on: ubuntu-latest
-    needs: test
+
+    needs:
+      - test-api
+
+    defaults:
+      run:
+        working-directory: frontend
 
     steps:
-      - name: Checkout
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Run Migration Scripts
+      - name: Build Frontend
         run: |
-          echo "Executing migrations..."
-          ls migrations
+          echo "Frontend build"
+
+  #################################################
+  # DATABASE MIGRATIONS
+  #################################################
+
+  run-migrations:
+    name: Run Migrations
+
+    runs-on: ubuntu-latest
+
+    needs:
+      - build-frontend
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: List Migration Files
+        run: |
+          echo "Running migrations"
+          ls -R migrations
+
+      # Futuramente
+      # sqlcmd
+      # prisma migrate deploy
+      # knex migrate:latest
+      # alembic upgrade head
+
+  #################################################
+  # DEPLOY API
+  #################################################
 
   deploy-api:
+    name: Deploy API App Service
+
     runs-on: ubuntu-latest
-    needs: migrations
+
+    needs:
+      - run-migrations
+
+    environment: dev
 
     defaults:
       run:
         working-directory: api
 
     steps:
-      - name: Checkout
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Setup Node
@@ -62,10 +124,46 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Build API
-        run: |
-          echo "Building API"
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Deploy API
-        run: |
-          echo "Deploying API to Azure
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ env.API_APP_NAME }}
+          package: ./api
+
+  #################################################
+  # DEPLOY FRONTEND
+  #################################################
+
+  deploy-frontend:
+    name: Deploy Frontend App Service
+
+    runs-on: ubuntu-latest
+
+    needs:
+      - deploy-api
+
+    environment: dev
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Deploy Frontend
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ env.FRONTEND_APP_NAME }}
+          package: ./frontend

@@ -1,0 +1,256 @@
+/* =====================================================
+   GLOBAL
+===================================================== */
+CSS
+body {
+    background: red !important;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background-color: #0f172a;
+    color: #e2e8f0;
+    line-height: 1.6;
+}
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+header {
+    background: linear-gradient(
+        135deg,
+        #1e293b,
+        #0f172a
+    );
+
+    padding: 80px 20px;
+    text-align: center;
+
+    border-bottom: 2px solid #2563eb;
+}
+
+header h1 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+
+    color: #f8fafc;
+}
+
+header h2 {
+    color: #60a5fa;
+    margin-bottom: 20px;
+}
+
+header p {
+    max-width: 800px;
+    margin: 0 auto;
+
+    color: #cbd5e1;
+}
+
+/* =====================================================
+   SECTIONS
+===================================================== */
+
+section {
+    max-width: 1200px;
+
+    margin: 40px auto;
+
+    padding: 30px;
+}
+
+section h2 {
+    font-size: 2rem;
+
+    margin-bottom: 20px;
+
+    color: #60a5fa;
+
+    border-left: 5px solid #2563eb;
+
+    padding-left: 12px;
+}
+
+/* =====================================================
+   CARDS
+===================================================== */
+
+.card {
+    background-color: #1e293b;
+
+    border: 1px solid #334155;
+
+    border-radius: 12px;
+
+    padding: 20px;
+
+    margin-bottom: 20px;
+
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+
+    border-color: #60a5fa;
+
+    box-shadow: 0 0 15px rgba(37, 99, 235, 0.25);
+}
+
+.card h3 {
+    margin-bottom: 10px;
+
+    color: #f8fafc;
+}
+
+.card p {
+    color: #cbd5e1;
+}
+
+/* =====================================================
+   SKILLS
+===================================================== */
+
+#skillsContainer {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 12px;
+}
+
+.skill {
+    background-color: #2563eb;
+
+    color: white;
+
+    padding: 10px 16px;
+
+    border-radius: 20px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+}
+
+/* =====================================================
+   PROJECTS
+===================================================== */
+
+#projectsContainer {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(300px, 1fr));
+
+    gap: 20px;
+}
+
+.project-card {
+    background-color: #1e293b;
+
+    border: 1px solid #334155;
+
+    border-radius: 12px;
+
+    padding: 20px;
+}
+
+.project-card h3 {
+    color: #60a5fa;
+}
+
+.project-card a {
+    display: inline-block;
+
+    margin-top: 12px;
+
+    color: #93c5fd;
+
+    text-decoration: none;
+
+    font-weight: bold;
+}
+
+.project-card a:hover {
+    color: white;
+}
+
+/* =====================================================
+   EXPERIENCE
+===================================================== */
+
+.experience-card {
+    background-color: #1e293b;
+
+    border-left: 4px solid #2563eb;
+
+    padding: 20px;
+
+    margin-bottom: 20px;
+
+    border-radius: 8px;
+}
+
+/* =====================================================
+   CERTIFICATIONS
+===================================================== */
+
+.certification-card {
+    background-color: #1e293b;
+
+    padding: 16px;
+
+    margin-bottom: 12px;
+
+    border-radius: 8px;
+
+    border: 1px solid #334155;
+}
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+footer {
+    text-align: center;
+
+    padding: 30px;
+
+    margin-top: 50px;
+
+    color: #94a3b8;
+
+    border-top: 1px solid #334155;
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 768px) {
+
+    header h1 {
+        font-size: 2rem;
+    }
+
+    header h2 {
+        font-size: 1.2rem;
+    }
+
+    section {
+        padding: 20px;
+    }
+
+    #projectsContainer {
+        grid-template-columns: 1fr;
+    }
+
+}

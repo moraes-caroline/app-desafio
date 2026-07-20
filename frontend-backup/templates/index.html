@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafio DevOps</title>
+
+    <!-- link CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='..\static\css\style.css') }}">
+</head>
+
+<body>
+
+    <header>
+        <h1 id="fullName">Caroline Moraes</h1>
+        <h2 id="title">Senior Analyst, DevOps Engineering</h2>
+
+        <p id="summary">
+            Loading profile...
+        </p>
+    </header>
+
+    <section>
+        <h2>Skills</h2>
+
+        <div id="skillsContainer">
+            Loading skills...
+        </div>
+    </section>
+
+    <section>
+        <h2>Projects</h2>
+
+        <div id="projectsContainer">
+            Loading projects...
+        </div>
+    </section>
+
+    <section>
+        <h2>Experience</h2>
+
+        <div id="experienceContainer">
+            Loading experience...
+        </div>
+    </section>
+
+    <section>
+        <h2>Certifications</h2>
+
+        <div id="certificationsContainer">
+            Loading certifications...
+        </div>
+    </section>
+
+    <script>
+
+        async function loadPortfolio() {
+
+            try {
+
+                const profile =
+                    await fetch("/api/profile")
+                    .then(r => r.json());
+
+                document.getElementById("fullName")
+                    .innerText = profile.fullName;
+
+                document.getElementById("title")
+                    .innerText = profile.title;
+
+                document.getElementById("summary")
+                    .innerText = profile.summary;
+
+            } catch {
+
+                console.log("Profile endpoint not available");
+            }
+
+            try {
+
+                const skills =
+                    await fetch("/api/skills")
+                    .then(r => r.json());
+
+                const skillsContainer =
+                    document.getElementById("skillsContainer");
+
+                skillsContainer.innerHTML = "";
+
+                skills.forEach(skill => {
+
+                    skillsContainer.innerHTML += `
+                        <div>
+                            <strong>${skill.name}</strong>
+                            (${skill.level})
+                        </div>
+                    `;
+                });
+
+            } catch {
+
+                console.log("Skills endpoint not available");
+            }
+
+            try {
+
+                const projects =
+                    await fetch("/api/projects")
+                    .then(r => r.json());
+
+                const projectsContainer =
+                    document.getElementById("projectsContainer");
+
+                projectsContainer.innerHTML = "";
+
+                projects.forEach(project => {
+
+                    projectsContainer.innerHTML += `
+                        <div>
+                            <h3>${project.name}</h3>
+
+                            <p>${project.description}</p>
+
+                            <a href="${project.gitHubUrl}" target="_blank">
+                                GitHub
+                            </a>
+                        </div>
+                    `;
+                });
+
+            } catch {
+
+                console.log("Projects endpoint not available");
+            }
+
+            try {
+
+                const experiences =
+                    await fetch("/api/experiences")
+                    .then(r => r.json());
+
+                const experienceContainer =
+                    document.getElementById("experienceContainer");
+
+                experienceContainer.innerHTML = "";
+
+                experiences.forEach(exp => {
+
+                    experienceContainer.innerHTML += `
+                        <div>
+                            <h3>${exp.positionName}</h3>
+
+                            <strong>${exp.companyName}</strong>
+
+                            <p>${exp.description}</p>
+                        </div>
+                    `;
+                });
+
+            } catch {
+
+                console.log("Experiences endpoint not available");
+            }
+
+            try {
+
+                const certifications =
+                    await fetch("/api/certifications")
+                    .then(r => r.json());
+
+                const certificationsContainer =
+                    document.getElementById("certificationsContainer");
+
+                certificationsContainer.innerHTML = "";
+
+                certifications.forEach(cert => {
+
+                    certificationsContainer.innerHTML += `
+                        <div>
+                            <strong>${cert.name}</strong>
+                            - ${cert.issuer}
+                        </div>
+                    `;
+                });
+
+            } catch {
+
+                console.log("Certifications endpoint not available");
+            }
+
+        }
+
+        loadPortfolio();
+
+    </script>
+
+</body>
+<footer>
+© 2026 Caroline Moraes
+| Azure • AWS • Terraform • DevOps
+</footer>
+</html>
